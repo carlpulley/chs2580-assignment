@@ -1,0 +1,87 @@
+// INPUT: data = [ { 'label': <timeline label>, 'timeline': [ { 'begin': <event start (double expressing seconds)>, 'end': <event end (double expressing seconds)> }, ... ] }]
+// INPUT: events = [ { 'observed_at': double, 'type': string, 'id': integer } ]
+// OPTIONAL INPUT: events_id = string
+
+var pb = 4, pt = 6, p = pb+pt, h = 3, c = p+h;
+var width = 1100;
+var height = data.length * c + 10;
+var timezone = -7*60*60; // -7 hours
+
+var begin = function(ds) { return ds.timeline.map(function (d) { return d.begin; }).min(); }
+var end = function(ds) { return ds.timeline.map(function (d) { return d.end; }).max(); }
+// TODO: modify scale so that area under cursor is magnified
+// TODO: link magnification view cursor to a red highlighting of displayed log events we are currently over
+var start = data.map(function(ds) { return begin(ds); }).min();
+var finish = data.map(function(ds) { return end(ds); }).max();
+var dates = pv.Scale.linear(start, finish).range(0, width);
+
+var vis = new pv.Panel()
+    .def("i", 0)
+    .def("log", events_id)
+    .def("evnts", events)
+    .def("sticky_bit", true)
+    .width(width)
+    .height(height)
+    .margin(20)
+    .left(50)
+    .right(400)
+    .events("all")
+    .event("click", function() { 
+        var state = this.sticky_bit();
+        if (!state) {
+            this.i(this.mouse().x);
+        }
+        return this.sticky_bit(!state);
+    })
+    .event("mousemove", function() {
+        if (this.sticky_bit()) {
+            var current_date = dates.invert(this.mouse().x);
+            var point = (this.evnts().select(function(d) { return d.observed_at <= current_date; }).last() || this.evnts().select(function(d) { return current_date < d.observed_at; }).first());
+            $(this.log()).fire("timeline:position", { 'observed_at': current_date, 'event_type': point.type, 'event_id': point.id });
+            return this.i(this.mouse().x);
+        }
+    });
+
+vis.add(pv.Rule)
+    .data(dates.ticks())
+    .strokeStyle("#eee")
+    .left(dates)
+    .anchor("bottom").add(pv.Label)
+        .text(function(d) pv.Format.date("%d/%b/%y %H:%M:%S")(new Date((d + timezone)*1000))); // Date works with milliseconds
+            
+data.forEach(function(ds) {
+    var line = vis.add(pv.Bar)
+        .data(ds.timeline)
+        .left(dates(begin(ds)))
+        .width(dates(end(ds)) - dates(begin(ds)))
+        .def("di", data.indexOf(ds))
+        .top(function() this.di() * c + p - 2)
+        .height(h)
+        .strokeStyle("#c4d8ff");
+
+    ds.timeline.forEach(function(d) {
+        var line = vis.add(pv.Bar)
+            .left(dates(d.begin))
+            .width(dates(d.end) - dates(d.begin))
+            .def("di", data.indexOf(ds))
+            .top(function() this.di() * c + p - 2)
+            .height(h)
+            .strokeStyle("#142f97");        
+    });
+        
+    var label = vis.add(pv.Label)
+        .left(dates(begin(ds)))
+        .def("di", data.indexOf(ds))
+        .top(function() this.di() * c + p)
+        .textAlign("left")
+        .textBaseline("bottom")
+        .text(ds.label);
+});
+
+vis.add(pv.Rule)
+    .left(function() this.parent.i())
+    .strokeStyle("red")
+    .anchor('xx').add(pv.Label)
+        .textAlign("center")
+        .textStyle("red")
+        .text(function() pv.Format.date("%d/%b/%y %H:%M:%S")(new Date((dates.invert(this.parent.i()) + timezone)*1000)));

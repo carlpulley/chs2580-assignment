@@ -1,0 +1,27 @@
+// WARNING NOTE: indexes here are 0 based!!
+// INPUT:
+//    root = <string>
+//    data = { nodes: [ { nodeName: <string>, nodeId: <integer> },.. ], links: [ { source: <integer>, target: <integer>, value: <double> },.. ] }
+
+var color = pv.Colors.category19().by(function(d) d.nodeId);
+
+var vis = new pv.Panel()
+    .width(800)
+    .height(800)
+    .top(150)
+    .left(150);
+
+var layout = vis.add(pv.Layout.Matrix)
+    .nodes(data.nodes)
+    .links(data.links)
+    .sort(function(a, b) b.nodeId - a.nodeId);
+
+layout.link.add(pv.Bar)
+    .fillStyle(function(l) l.linkValue
+        ? ((l.targetNode.nodeId == l.sourceNode.nodeId)
+        ? color(l.sourceNode) : "#555") : "#eee")
+    .antialias(false)
+    .lineWidth(1);
+
+layout.label.add(pv.Label)
+    .textStyle(color);

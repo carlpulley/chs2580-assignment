@@ -1,0 +1,102 @@
+/*    Copyright (C) 2010  Dr. Carl J. Pulley                                   */
+/*                                                                             */
+/*    This program is free software: you can redistribute it and/or modify     */
+/*    it under the terms of the GNU General Public License as published by     */
+/*    the Free Software Foundation, either version 3 of the License, or        */
+/*    (at your option) any later version.                                      */
+/*                                                                             */
+/*    This program is distributed in the hope that it will be useful,          */
+/*    but WITHOUT ANY WARRANTY; without even the implied warranty of           */
+/*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            */
+/*    GNU General Public License for more details.                             */
+/*                                                                             */
+/*    You should have received a copy of the GNU General Public License        */
+/*    along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+
+.loading {
+    height: 0.8em;
+    width: 7em;
+}
+
+div.tabs ul.menu {
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+div.tabs ul.menu li.tab {
+    display:inline;
+    margin:0 2px 0 0;
+    padding:1;
+    float: left;
+}
+
+div.tabs ul.menu li.tab a.tab {
+    margin:0 2px 0 0;
+    padding:0 0 1px 3px;
+    padding-right: 3px;
+    border-top: 1px solid #ADB6AD;
+    border-left: 1px solid #ADB6AD;
+    border-right: 1px solid #ADB6AD;
+    text-decoration:none;
+    color: black;
+    position: relative;
+    float: left;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+div.tabs div.content {
+    padding: 4px 9px 2px 6px;
+}
+
+div.tabs ul.menu li.tab a.tab:hover { 
+    background-color: #626D63;
+    color: white;
+}
+
+div.tabs ul.menu li.tab.current a.tab { 
+    background-color: #ADB6AD; 
+}
+
+div.tabs ul.menu li.tab.current a.tab:hover { 
+    background-color: #ADB6AD; 
+    color: black;
+}
+
+div.tabs div.content {
+    clear: both;
+    border-top: 1px solid #ADB6AD;
+    border-bottom: 1px solid #ADB6AD;
+    padding-top: 2px;
+}
+
+.events {
+    font-family: "Courier New";
+    font-size: 0.8em;
+    font-weight: normal;
+    padding-left: 1em;
+}
+
+.events.timeline {
+    font-family: "Courier New";
+    font-size: 0.8em;
+    font-weight: normal;
+    height: 25em;
+    width: 100em;
+    overflow: auto;
+    border: 1px solid #BCC2BA;
+    padding-left: 1em;
+}
+
+.events .event {
+    white-space: pre;
+}
+
+.events .event[highlight='true'] {
+    color: red;
+}

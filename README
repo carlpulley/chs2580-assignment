@@ -1,0 +1,94 @@
+== License
+
+Copyright (C) 2010  Dr. Carl J. Pulley
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+== Getting Started
+
+This is a Rails3 application that has been built within an Ubuntu 10.04 operating system using RVM to manage the Rails environment.
+
+1. Clone this Github project via:
+        <tt>git clone https://github.com/carlpulley/chs2580-assignment.git</tt>
+
+2. Ensure all gem dependencies are successfully installed with:
+        <tt>bundle install</tt>
+
+3. Build your SQLite3 database with:
+        <tt>rake db:migrate</tt>
+
+4. Ensure the testing database uses the same DB schema with:
+        <tt>rake db:test:load</tt>
+
+5. Build the SQLite3 database tables and relationships with:
+        <tt>rake db:seed</tt>
+
+6. Ensure that all unit tests pass successfully with:
+        <tt>rake test:units</tt>
+
+Finally, you may now run this Rails3 application using:
+        <tt>rails server</tt> or <tt>rails s</tt>
+and by navigating to the URL http://localhost:3000/ with your favourite browser.
+
+== Description of (Significant) Contents
+
+The significant directory structure for this Rails3 application is as follows:
+
+  |-- app
+  |   |-- controllers
+  |   |   |-- research_controller.rb
+  |   |   `-- report_controller.rb
+  |   |-- models
+  |   `-- views
+  |       |-- graph
+  |       |-- layouts
+  |       |-- research
+  |       `-- report
+  |-- lib
+  |   `-- tasks
+  `-- test
+      `-- unit
+
+app
+  Holds all the code that's specific to this particular application.
+
+app/controllers
+  Holds all controllers. All controllers should descend from
+  ApplicationController which itself descends from ActionController::Base.
+  The research controller is used to build the research notes views (these
+  are used to document specific investigations into our data set).
+
+app/models
+  Holds models that should be named like apache_access.rb. Models descend from
+  ActiveRecord::Base by default.
+
+app/views
+  Holds the template files for the view that should be named like
+  report/index.html.erb for the ReportController#index action. All views use
+  eRuby syntax by default. Different view formats (eg. CSV and PDF) are supported.
+
+app/views/layouts
+  Holds the template files for layouts to be used with views. This models the
+  common header/footer method of wrapping views. In your views, define a layout
+  using the <tt>layout :default</tt> and create a file named default.html.erb.
+  Inside default.html.erb, call <% yield %> to render the view using this
+  layout.
+
+lib/tasks
+  All rake based processing tasks are stored here.
+
+test/unit
+  Unit and functional tests along with fixtures. When using the rails generate
+  command, template test files will be generated for you and placed in this
+  directory.
